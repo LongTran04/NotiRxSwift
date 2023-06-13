@@ -1,0 +1,40 @@
+PODS:
+  - Action (5.0.0):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - ObjectMapper (4.2.0)
+  - PureLayout (3.1.9)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
+
+DEPENDENCIES:
+  - Action
+  - ObjectMapper
+  - PureLayout
+  - RxCocoa (= 6.5.0)
+  - RxSwift (= 6.5.0)
+
+SPEC REPOS:
+  trunk:
+    - Action
+    - ObjectMapper
+    - PureLayout
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+
+SPEC CHECKSUMS:
+  Action: 47f1825511907b4fcd79dd7a7db9526c20f78018
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+
+PODFILE CHECKSUM: cdca5ed2485dd0ea703de737ba38fb4baeadb9e2
+
+COCOAPODS: 1.12.1
