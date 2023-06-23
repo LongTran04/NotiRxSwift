@@ -93,8 +93,9 @@ class HomeViewModel: ListViewModel<NotiModel, NotiCellViewModel> {
     
     func getSearchResult(_ searchText: String) -> [NotiCellViewModel] {
         if searchText.isEmpty {
-            return model?.data.map { NotiCellViewModel(model: $0) } ?? []
-        }
+            return model?.data.map {
+                NotiCellViewModel(model: $0, highlightTextHepler: RelativeHighlightSearchTextHelper())
+            } ?? [] }
         return model?.data.filter {
             let listSearchText = searchText.split(separator: " ")
             for item in listSearchText {
@@ -103,7 +104,7 @@ class HomeViewModel: ListViewModel<NotiModel, NotiCellViewModel> {
                 }
             }
             return false
-        }.map { NotiCellViewModel(model: $0) } ?? []
+        }.map { NotiCellViewModel(model: $0, highlightTextHepler: RelativeHighlightSearchTextHelper()) } ?? []
     }
     
     func searchAction(searchText: String) {

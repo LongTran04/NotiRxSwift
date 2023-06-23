@@ -31,7 +31,7 @@ class NotiTableViewCell: TableCell<NotiCellViewModel> {
         }) => disposeBag
         viewModel.rxNotiTitle ~> notiTitleLabel.rx.text => disposeBag
         viewModel.rxNotiTime ~> notiTimeLabel.rx.text => disposeBag
-        viewModel.rxBackgroundColor ~> rx.backgroundColor => disposeBag
+        viewModel.rxBackgroundStatus.map { $0?.getBackgroundColor() } ~> rx.backgroundColor => disposeBag
         viewModel.rxHighlight.subscribe(onNext: { [weak self] ranges in
             self?.notiTitleLabel.highlight(ranges)
         }) => disposeBag
@@ -49,49 +49,48 @@ class NotiCellViewModel: CellViewModel<Noti> {
     let rxActionImage = BehaviorRelay<String>(value: "")
     let rxNotiTitle = BehaviorRelay<String?>(value: nil)
     let rxNotiTime = BehaviorRelay<String?>(value: nil)
-    let rxBackgroundColor = BehaviorRelay<UIColor?>(value: nil)
+    let rxBackgroundStatus = BehaviorRelay<String?>(value: nil)
     let rxHighlight = BehaviorRelay<Ranges>(value: Ranges(highlight: []))
     let rxSearchText = BehaviorRelay<String?>(value: nil)
-    var highlightSearchTextHepler: HighlightSearchTextHelper?
+    var highlightTextHepler: HighlightTextHepler?
     
     override func react() {
         guard let model = model else { return }
         rxUserImage.accept(model.image)
         rxActionImage.accept(model.icon)
         rxNotiTitle.accept(model.message.text)
-        rxNotiTitle.subscribe(onNext: { [weak self] title in
-            self?.highlightSearchTextHepler = HighlightSearchTextHelper(searchText: self?.rxSearchText.value, mainText: title ?? "")
-        }) => disposeBag
         rxNotiTime.accept(model.createdAt.toTimeText())
-        rxBackgroundColor.accept(getBackgroundColor(model.status))
+        rxBackgroundStatus.accept(model.status)
         rxSearchText.map { [weak self] _ in
             self?.getNewTitle()
         }.bind(to: rxNotiTitle) => disposeBag
         rxHighlight.accept(getRanges(model: model))
     }
     
+    convenience init(model: Noti?, highlightTextHepler: HighlightTextHepler?) {
+        self.init(model: model)
+        self.highlightTextHepler = highlightTextHepler
+    }
+    
     func getRanges(model: Noti) -> Ranges {
+        let searchText = rxSearchText.value ?? ""
         let title = rxNotiTitle.value ?? ""
         let highlightTexts = getHighlightText(model.message)
         let rangesHighlight = rangesForHighlight(highlightTexts, in: title)
-        if let rangesSearchText = highlightSearchTextHepler?.ranges {
+        if let rangesSearchText = highlightTextHepler?.getListRange(with: searchText, in: title) {
             return Ranges(searchText: rangesSearchText, highlight: rangesHighlight)
         }
         return Ranges(highlight: rangesHighlight)
     }
     
     func getNewTitle() -> String {
+        let searchText = rxSearchText.value ?? ""
         let title = rxNotiTitle.value ?? ""
-        if let range = highlightSearchTextHepler?.range, range.location > 40 {
+        if let range = highlightTextHepler?.getRange(with: searchText, in: title), range.location > 40 {
             let newTitle = title.subString(from: range.location - 30, to: title.count)
             return newTitle
         }
         return title
-    }
-    
-    func getBackgroundColor(_ status: String) -> UIColor {
-        let backgroundColor: UIColor = (status == "unread") ? .backgroundColor : .white
-        return backgroundColor
     }
     
     func getHighlightText(_ message: Message) -> [String] {
@@ -121,6 +120,11 @@ extension String {
        let startIndex = self.index(self.startIndex, offsetBy: from)
        let endIndex = self.index(self.startIndex, offsetBy: to)
        return String(self[startIndex..<endIndex])
+    }
+    
+    func getBackgroundColor() -> UIColor {
+        let backgroundColor: UIColor = (self == "unread") ? .backgroundColor : .white
+        return backgroundColor
     }
 }
 

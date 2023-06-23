@@ -7,21 +7,15 @@
 
 import Foundation
 
-class HighlightSearchTextHelper {
-    var searchText: String? = nil
-    var mainText: String = ""
-    var range: NSRange? = nil
-    var ranges: [NSRange]? = nil
+protocol HighlightTextHepler: AnyObject {
+    func getRange(with searchText: String, in mainText: String) -> NSRange?
+    func getListRange(with searchText: String, in mainText: String) -> [NSRange]?
+}
+
+class RelativeHighlightSearchTextHelper: HighlightTextHepler {
     
-    init(searchText: String? = nil, mainText: String) {
-        self.searchText = searchText
-        self.mainText = mainText
-        self.range = getRangeSearchText()
-        self.ranges = rangesForSearchText()
-    }
-    
-    func getRangeSearchText() -> NSRange? {
-        if let searchText = searchText, !searchText.isEmpty {
+    func getRange(with searchText: String, in mainText: String) -> NSRange? {
+        if !searchText.isEmpty {
             let searchTexts = searchText.split(separator: " ")
             for item in searchTexts {
                 if (mainText.lowercased().folded as NSString).contains(item.lowercased().folded) {
@@ -33,9 +27,8 @@ class HighlightSearchTextHelper {
         return nil
     }
     
-    func rangesForSearchText() -> [NSRange]? {
+    func getListRange(with searchText: String, in mainText: String) -> [NSRange]? {
         var ranges: [NSRange] = []
-        guard let searchText = searchText else { return nil }
         let searchTexts = searchText.split(separator: " ").map{$0.lowercased().folded}
         let ptrn = searchTexts.joined(separator: "|")
         do {
