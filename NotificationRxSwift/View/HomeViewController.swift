@@ -35,23 +35,17 @@ class HomeViewController: SFPage<HomeViewModel>, UISearchBarDelegate {
         super.bindViewAndViewModel()
         guard let viewModel = viewModel else { return }
         tableBinding = HomeTableViewBindingHelper(tableView: tableView, viewModel: viewModel)
-        searchBtn.rx.tap.subscribe(onNext: { [weak self] _ in
-            self?.tapSearchBtn()
-        }) => disposeBag
-        exitBtn.rx.tap.subscribe(onNext: { [weak self] _ in
-            self?.tapExitBtn()
-        }) => disposeBag
-        searchBar.rx.text.subscribe(onNext: { [weak self] text in
-            viewModel.rxSearchAction.accept(text)
+        let exitBtnObservable: Observable<Void> = exitBtn.rx.tap.asObservable()
+        let showSearchViewBySearchBtn = searchBtn.rx.tap.map { _ in false }
+        let hideSearchViewByExitBtn = exitBtnObservable.map { _ in true }
+        Observable.merge(showSearchViewBySearchBtn, hideSearchViewByExitBtn) ~> searchView.rx.isHidden => disposeBag
+        searchBar.rx.text.bind(to: viewModel.rxSearchAction) => disposeBag
+        exitBtnObservable.subscribe(onNext: { [weak self] in
+            self?.resetSearchView()
         }) => disposeBag
     }
     
-    func tapSearchBtn() {
-        searchView.isHidden = false
-    }
-    
-    func tapExitBtn() {
-        searchView.isHidden = true
+    private func resetSearchView() {
         searchBar.text = ""
         viewModel?.rxSearchAction.accept("")
     }
@@ -72,7 +66,7 @@ class HomeViewModel: ListViewModel<NotiModel, NotiCellViewModel> {
     let rxSearchAction = BehaviorRelay<String?>(value: nil)
     
     override func react() {
-        model = getNotiModel()
+        model = readJSONFile()
         itemsSource.reset([getNotiCellViewModels(models: model?.data ?? [])])
         rxSearchAction.subscribe(onNext: { [weak self] text in
             self?.searchAction(searchText: text ?? "")
@@ -83,7 +77,7 @@ class HomeViewModel: ListViewModel<NotiModel, NotiCellViewModel> {
         return models.map { NotiCellViewModel(model: $0) }
     }
     
-    func getNotiModel() -> NotiModel {
+    func readJSONFile() -> NotiModel {
         var notiModel = NotiModel(data: [])
         do {
           if let bundlePath = Bundle.main.path(forResource: "noti", ofType: "json"),
@@ -99,8 +93,9 @@ class HomeViewModel: ListViewModel<NotiModel, NotiCellViewModel> {
     
     func getSearchResult(_ searchText: String) -> [NotiCellViewModel] {
         if searchText.isEmpty {
-            return model?.data.map { NotiCellViewModel(model: $0) } ?? []
-        }
+            return model?.data.map {
+                NotiCellViewModel(model: $0, highlightTextHepler: RelativeHighlightSearchTextHelper())
+            } ?? [] }
         return model?.data.filter {
             let listSearchText = searchText.split(separator: " ")
             for item in listSearchText {
@@ -109,7 +104,7 @@ class HomeViewModel: ListViewModel<NotiModel, NotiCellViewModel> {
                 }
             }
             return false
-        }.map { NotiCellViewModel(model: $0) } ?? []
+        }.map { NotiCellViewModel(model: $0, highlightTextHepler: RelativeHighlightSearchTextHelper()) } ?? []
     }
     
     func searchAction(searchText: String) {

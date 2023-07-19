@@ -30,6 +30,7 @@
 		5287E5D82A31CA9000C3317C /* NotiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5287E5D72A31CA9000C3317C /* NotiModel.swift */; };
 		5287E5DC2A31CB3600C3317C /* NotiTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5287E5DA2A31CB3600C3317C /* NotiTableViewCell.swift */; };
 		5287E5DD2A31CB3600C3317C /* NotiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5287E5DB2A31CB3600C3317C /* NotiTableViewCell.xib */; };
+		52ABFF8F2A42959000A4C3F0 /* HighlightSearchTextHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52ABFF8E2A42959000A4C3F0 /* HighlightSearchTextHelper.swift */; };
 		89F0D3E74E4FAC20C22868DF /* Pods_NotificationRxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922F7EE87AE0B9D3845C1715 /* Pods_NotificationRxSwift.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		5287E5D72A31CA9000C3317C /* NotiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiModel.swift; sourceTree = "<group>"; };
 		5287E5DA2A31CB3600C3317C /* NotiTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiTableViewCell.swift; sourceTree = "<group>"; };
 		5287E5DB2A31CB3600C3317C /* NotiTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotiTableViewCell.xib; sourceTree = "<group>"; };
+		52ABFF8E2A42959000A4C3F0 /* HighlightSearchTextHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightSearchTextHelper.swift; sourceTree = "<group>"; };
 		78511DB70227867FE1D6724B /* Pods-NotificationRxSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationRxSwift.release.xcconfig"; path = "Target Support Files/Pods-NotificationRxSwift/Pods-NotificationRxSwift.release.xcconfig"; sourceTree = "<group>"; };
 		922F7EE87AE0B9D3845C1715 /* Pods_NotificationRxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationRxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00BFB143F49676174896EA1 /* Pods-NotificationRxSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationRxSwift.debug.xcconfig"; path = "Target Support Files/Pods-NotificationRxSwift/Pods-NotificationRxSwift.debug.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				5287E5D62A31CA4100C3317C /* View */,
 				5287E5D52A31CA3300C3317C /* Model */,
 				5287E5882A31C6AD00C3317C /* AppDelegate.swift */,
+				52ABFF902A42FDE100A4C3F0 /* Utility */,
 				5287E58A2A31C6AD00C3317C /* SceneDelegate.swift */,
 				5287E58E2A31C6AD00C3317C /* Main.storyboard */,
 				5287E5912A31C6AE00C3317C /* Assets.xcassets */,
@@ -180,6 +183,14 @@
 				5287E5DB2A31CB3600C3317C /* NotiTableViewCell.xib */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		52ABFF902A42FDE100A4C3F0 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				52ABFF8E2A42959000A4C3F0 /* HighlightSearchTextHelper.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,6 +313,7 @@
 				5287E5CA2A31C89500C3317C /* Model.swift in Sources */,
 				5287E5CC2A31C89500C3317C /* Views.swift in Sources */,
 				5287E5C82A31C89500C3317C /* ListPage.swift in Sources */,
+				52ABFF8F2A42959000A4C3F0 /* HighlightSearchTextHelper.swift in Sources */,
 				5287E5CD2A31C89500C3317C /* Protocols.swift in Sources */,
 				5287E58D2A31C6AD00C3317C /* HomeViewController.swift in Sources */,
 				5287E5CF2A31C89500C3317C /* LocalService.swift in Sources */,
